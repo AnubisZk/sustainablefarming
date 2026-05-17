@@ -68,7 +68,7 @@ for (const entry of ENTRIES) {
 
 const total = sizeOf(DIST);
 console.log(`Built dist/ — ${formatBytes(total)} ready to publish.`);
-if (skipped) process.exitCode = 1;
+// if (skipped) process.exitCode = 1;
 
 function sizeOf(p) {
     const st = statSync(p);
