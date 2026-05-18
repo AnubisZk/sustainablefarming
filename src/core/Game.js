@@ -17,6 +17,7 @@ import { MissionSystem } from '../systems/MissionSystem.js';
 import { DayNightSystem } from '../systems/DayNightSystem.js';
 import { EventSystem } from '../systems/EventSystem.js';
 import { AnimalSystem } from '../systems/AnimalSystem.js';
+import { LandSystem } from '../systems/LandSystem.js';
 
 const EDUCATIONAL_TIPS = [
     "Hayvan gübresi doğru işlendiğinde atık değil, toprağı besleyen doğal bir kaynaktır.",
@@ -146,10 +147,12 @@ export class Game {
         this.dayNight      = new DayNightSystem(this);
         this.eventSystem   = new EventSystem(this);
         this.animalSystem  = new AnimalSystem(this);
+        this.landSystem     = new LandSystem(this);
 
         this._cachedScores = null;
         this._systemTickInterval = setInterval(() => this._systemTick(), 5000);
 
+        this.renderer.landSystem = this.landSystem;
         this._centerCamera();
         this._loop = this._loop.bind(this);
         requestAnimationFrame(this._loop);
@@ -208,6 +211,7 @@ export class Game {
             ...this.missionSystem.serialize(),
             ...this.animalSystem.serialize(),
             ...this.eventSystem.serialize(),
+            ...this.landSystem?.serialize(),
         };
     }
 
@@ -219,6 +223,15 @@ export class Game {
             this.eventSystem.applyEffect(scores, placed);
         }
         this._cachedScores = scores;
+
+        // Arazi genişleme kontrolü
+        const expanded = this.landSystem?.checkExpansion(scores.totalScore);
+        if (expanded) {
+            this.renderer.markDirty();
+            this.ui?.showToast?.(expanded.msg, 3000);
+            // Kilitli hücreleri temizle (dışarıdaki nesneler korunur)
+        }
+
         return scores;
     }
 
@@ -293,7 +306,10 @@ export class Game {
             this.missionSystem = new MissionSystem(this);
             this.dayNight      = new DayNightSystem(this);
             this.animalSystem  = new AnimalSystem(this);
+        this.landSystem     = new LandSystem(this);
             this.eventSystem.deserialize(gs);
+            this.landSystem?.deserialize(gs);
+            this.renderer.landSystem = this.landSystem;
             this.renderer.markDirty();
             return true;
         }
@@ -307,6 +323,8 @@ export class Game {
         this.missionSystem = new MissionSystem(this);
         this.dayNight      = new DayNightSystem(this);
         this.animalSystem  = new AnimalSystem(this);
+        this.landSystem     = new LandSystem(this);
+        this.renderer.landSystem = this.landSystem;
         this._centerCamera();
         this.renderer.markDirty();
         this.ui?.showToast('🔄 Çiftlik sıfırlandı');
@@ -345,6 +363,12 @@ export class Game {
 
     onPrimaryClick(gx, gy) {
         if (!this.tileMap.inBounds(gx, gy)) return;
+        // Kilitli arazi kontrolü
+        if (this.landSystem && !this.landSystem.isCellActive(gx, gy)) {
+            const next = this.landSystem.nextMilestone(this._cachedScores?.totalScore ?? 0);
+            if (next) this.ui?.showToast?.(`🔒 Bu alan kilitli! ${next.score} puana ulaş.`, 2000);
+            return;
+        }
         this.animalSystem?.onPlayerAction();
         if (this.tool === 'erase') {
             const objHere = this.tileMap.objectAt(gx, gy);

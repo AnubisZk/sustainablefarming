@@ -94,6 +94,7 @@ export class Renderer {
         this.previewValid = true;
         this.eraseMode = false;
         this.nightAlpha = 0; // 0=gündüz, 0.45=gece
+        this.landSystem = null; // Game tarafından set edilir
         // Flip flags applied to the ghost preview (set by Game).
         this.previewFlipH = false;
         this.previewFlipV = false;
@@ -287,7 +288,10 @@ export class Renderer {
         if (this.showGrid)        this._drawGrid();
         if (this._objectsCanvas)  ctx.drawImage(this._objectsCanvas,  wb.x, wb.y, wb.w, wb.h);
 
-        // 3. Live overlays: actively-animating objects/tiles + hover +
+        // 3. Kilitli hücre overlay (arazi genişleme sistemi)
+        this._drawLockedOverlay();
+
+        // 4. Live overlays: actively-animating objects/tiles + hover +
         //    preview ghost. Sorted together so depth is sane.
         this._drawLiveOverlay();
 
@@ -295,6 +299,38 @@ export class Renderer {
 
         // 4. Top-of-frame vignette (applied in screen space).
         ctx.drawImage(this._chromeCanvas.top, 0, 0, w, h);
+    }
+
+    _drawLockedOverlay() {
+        const ls = this.landSystem;
+        if (!ls) return;
+        const ctx = this.ctx;
+        const W = this.tileMap.width, H = this.tileMap.height;
+        const TW = CONFIG.tile.w, TH = CONFIG.tile.h;
+
+        for (let gy = 0; gy < H; gy++) {
+            for (let gx = 0; gx < W; gx++) {
+                if (ls.isCellActive(gx, gy)) continue;
+                // İzometrik hücre köşeleri
+                const cx = (gx - gy) * TW / 2;
+                const cy = (gx + gy) * TH / 2;
+                ctx.beginPath();
+                ctx.moveTo(cx,           cy - TH / 2);
+                ctx.lineTo(cx + TW / 2,  cy);
+                ctx.lineTo(cx,           cy + TH / 2);
+                ctx.lineTo(cx - TW / 2,  cy);
+                ctx.closePath();
+                ctx.fillStyle = 'rgba(30, 20, 10, 0.45)';
+                ctx.fill();
+                // Kilit ikonu (küçük)
+                if (gx % 2 === 0 && gy % 2 === 0) {
+                    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+                    ctx.font = '10px sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('🔒', cx, cy + 4);
+                }
+            }
+        }
     }
 
     _applyCamera() {

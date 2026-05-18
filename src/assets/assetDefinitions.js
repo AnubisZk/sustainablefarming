@@ -803,3 +803,146 @@ export function sunflowerField() {
     });
     return out;
 }
+
+/* ─────────────────── YENİ HAYVANLAR ────────────────────────── */
+
+export function rooster() {
+    const cx = 1, cy = 1;
+    const out = [];
+    // Gövde - tavuktan daha büyük ve dik
+    out.push(...box(cx, cy, 0, 2, 2, 3, P.chickenRed));
+    out.push({ x: cx, y: cy, z: 2, c: P.barn });
+    out.push({ x: cx+1, y: cy+1, z: 2, c: P.barn });
+    // Büyük ibik
+    out.push({ x: cx+1, y: cy, z: 3, c: P.chickenBody });
+    out.push({ x: cx+1, y: cy, z: 4, c: P.chickenRed });
+    out.push({ x: cx+1, y: cy, z: 5, c: P.chickenRed });
+    // Gaga
+    out.push({ x: cx+1, y: cy-1, z: 3, c: P.straw });
+    // Kuyruk tüyleri
+    out.push({ x: cx-1, y: cy, z: 3, c: P.leaf });
+    out.push({ x: cx-1, y: cy+1, z: 4, c: P.grass });
+    out.push({ x: cx-1, y: cy, z: 4, c: P.vegGreen });
+    // Ayaklar
+    out.push({ x: cx, y: cy+1, z: 0, c: P.straw });
+    out.push({ x: cx+1, y: cy, z: 0, c: P.straw });
+    return out;
+}
+
+export function chick() {
+    // Küçük sarı civciv
+    const out = [];
+    out.push(...box(1, 1, 0, 2, 2, 1, P.chickenBody));
+    out.push({ x: 2, y: 1, z: 1, c: P.chickenBody });
+    out.push({ x: 1, y: 2, z: 1, c: P.chickenBody });
+    out.push({ x: 2, y: 1, z: 2, c: P.strawLight }); // kafa
+    out.push({ x: 2, y: 2, z: 2, c: P.chickenRed }); // ibik küçük
+    out.push({ x: 3, y: 1, z: 1, c: P.straw }); // gaga
+    // Küçük kanatlar
+    out.push({ x: 1, y: 1, z: 1, c: P.strawLight });
+    out.push({ x: 1, y: 2, z: 1, c: P.strawLight });
+    return out;
+}
+
+export function duck() {
+    const out = [];
+    // Gövde - yuvarlak ve geniş
+    out.push(...box(0, 1, 0, VPT, 2, 2, P.metalGray));
+    out.push({ x: 0, y: 1, z: 2, c: P.white });
+    out.push({ x: 1, y: 1, z: 2, c: P.white });
+    out.push({ x: 0, y: 2, z: 2, c: P.white });
+    // Baş - yeşil
+    out.push({ x: VPT-1, y: 1, z: 2, c: P.leaf });
+    out.push({ x: VPT-1, y: 2, z: 2, c: P.leaf });
+    out.push({ x: VPT-1, y: 1, z: 3, c: P.leafDark });
+    // Turuncu gaga
+    out.push({ x: VPT, y: 1, z: 2, c: P.carrot });
+    // Kuyruk
+    out.push({ x: 0, y: 1, z: 3, c: P.metalGray });
+    out.push({ x: 0, y: 2, z: 3, c: P.metalGray });
+    // Turuncu ayaklar
+    out.push({ x: 1, y: 1, z: 0, c: P.carrot });
+    out.push({ x: 2, y: 2, z: 0, c: P.carrot });
+    return out;
+}
+
+export function duckling() {
+    // Küçük ördek yavrusu - sarımsı
+    const out = [];
+    out.push(...box(1, 1, 0, 2, 2, 1, P.strawLight));
+    out.push({ x: 2, y: 1, z: 1, c: P.strawLight });
+    out.push({ x: 1, y: 2, z: 1, c: P.strawLight });
+    out.push({ x: 2, y: 2, z: 2, c: P.chickenBody }); // kafa
+    out.push({ x: 3, y: 2, z: 1, c: P.carrot }); // gaga
+    // Küçük kanat
+    out.push({ x: 1, y: 1, z: 1, c: P.straw });
+    return out;
+}
+
+export function goat() {
+    const out = [];
+    // Gövde
+    out.push(...box(0, 1, 1, VPT, 2, 2, P.sheepBody));
+    // Gri/kahve lekeler
+    out.push({ x: 1, y: 2, z: 2, c: P.sheepFace });
+    out.push({ x: 3, y: 1, z: 2, c: P.stoneDark });
+    // Baş
+    out.push(...box(VPT-1, 1, 2, 1, 2, 2, P.sheepFace));
+    // Boynuzlar - keçiye özgü
+    out.push({ x: VPT-1, y: 1, z: 4, c: P.straw });
+    out.push({ x: VPT-1, y: 2, z: 4, c: P.straw });
+    out.push({ x: VPT-1, y: 1, z: 5, c: P.strawDark });
+    out.push({ x: VPT-1, y: 2, z: 5, c: P.strawDark });
+    // Sakal
+    out.push({ x: VPT, y: 1, z: 2, c: P.whiteShadow });
+    // Bacaklar ince
+    [[0,1],[0,2],[3,1],[3,2]].forEach(([x,y]) => {
+        out.push({ x, y, z: 0, c: P.sheepLeg });
+    });
+    return out;
+}
+
+export function lamb() {
+    // Kuzu - küçük ve yuvarlak yünlü
+    const out = [];
+    out.push(...box(1, 1, 1, 2, 2, 2, P.sheepBody));
+    out.push({ x: 1, y: 1, z: 3, c: P.whiteShadow });
+    out.push({ x: 2, y: 2, z: 3, c: P.whiteShadow });
+    // Kafa
+    out.push({ x: 2, y: 1, z: 3, c: P.sheepFace });
+    out.push({ x: 3, y: 1, z: 2, c: P.sheepFace });
+    // Küçük bacaklar
+    [[1,1],[1,2],[2,1],[2,2]].forEach(([x,y]) =>
+        out.push({ x, y, z: 0, c: P.sheepLeg })
+    );
+    return out;
+}
+
+export function horse() {
+    const out = [];
+    // Güçlü gövde
+    out.push(...box(0, 1, 1, VPT, 2, 4, P.soilRich));
+    // Boyun
+    out.push(...box(VPT-1, 1, 4, 1, 2, 3, P.soil));
+    // Baş
+    out.push(...box(VPT-1, 1, 6, 1, 2, 2, P.soilRich));
+    out.push({ x: VPT-1, y: 1, z: 6, c: P.cowNose });
+    // Uzun burun
+    out.push({ x: VPT, y: 1, z: 5, c: P.soilRich });
+    out.push({ x: VPT, y: 2, z: 5, c: P.soilRich });
+    // Yele - siyah/koyu
+    out.push({ x: VPT-1, y: 1, z: 8, c: P.ironLight });
+    out.push({ x: VPT-2, y: 1, z: 7, c: P.ironLight });
+    out.push({ x: VPT-2, y: 2, z: 7, c: P.ironLight });
+    out.push({ x: VPT-3, y: 1, z: 6, c: P.ironLight });
+    // Güçlü bacaklar
+    [[0,1],[0,2],[3,1],[3,2]].forEach(([x,y]) => {
+        out.push({ x, y, z: 0, c: P.cowHoof });
+        out.push({ x, y, z: 1, c: P.soilDark });
+    });
+    // Kuyruk
+    out.push({ x: 0, y: 1, z: 4, c: P.ironLight });
+    out.push({ x: 0, y: 2, z: 4, c: P.ironLight });
+    out.push({ x: 0, y: 1, z: 3, c: P.iron });
+    return out;
+}
