@@ -4,14 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <meta name="theme-color" content="#3a7a28" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>Atıksız Çiftlik — Döngüsel Yaşam Simülasyonu</title>
     <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-<!-- YÜKLEME EKRANI -->
+<!-- YÜKLEME -->
 <div id="loading-screen">
     <div class="loading-card">
         <div class="loading-logo">🌱</div>
@@ -43,13 +41,13 @@
     <!-- SOL ARAÇ ÇUBUĞU -->
     <aside id="toolbar"></aside>
 
-    <!-- NESNE PALETİ (alt) -->
+    <!-- PALET -->
     <section id="palette">
         <nav id="palette-tabs"></nav>
         <div id="palette-grid"></div>
     </section>
 
-    <!-- SÜRDÜRÜLEBİLİRLİK GÖSTERGELERİ (sağ üst) -->
+    <!-- SKOR PANELİ (sağ üst) -->
     <section id="score-panel">
         <div class="score-header">
             <span class="score-label">Sürdürülebilirlik</span>
@@ -61,92 +59,96 @@
             <div class="indicator-icon">♻️</div>
             <div class="indicator-body">
                 <div class="indicator-name">Atık Azaltma</div>
-                <div class="indicator-track">
-                    <div class="indicator-fill" style="width:0%"></div>
-                </div>
+                <div class="indicator-track"><div class="indicator-fill" style="width:0%"></div></div>
             </div>
             <div class="indicator-value">0%</div>
         </div>
-
         <div class="indicator" id="bar-soil">
             <div class="indicator-icon">🌱</div>
             <div class="indicator-body">
                 <div class="indicator-name">Toprak Verimliliği</div>
-                <div class="indicator-track">
-                    <div class="indicator-fill" style="width:0%"></div>
-                </div>
+                <div class="indicator-track"><div class="indicator-fill" style="width:0%"></div></div>
             </div>
             <div class="indicator-value">0%</div>
         </div>
-
         <div class="indicator" id="bar-water">
             <div class="indicator-icon">💧</div>
             <div class="indicator-body">
                 <div class="indicator-name">Su Tasarrufu</div>
-                <div class="indicator-track">
-                    <div class="indicator-fill" style="width:0%"></div>
-                </div>
+                <div class="indicator-track"><div class="indicator-fill" style="width:0%"></div></div>
             </div>
             <div class="indicator-value">0%</div>
         </div>
-
         <div class="indicator" id="bar-energy">
             <div class="indicator-icon">☀️</div>
             <div class="indicator-body">
-                <div class="indicator-name">Enerji Sürdürülebilirliği</div>
-                <div class="indicator-track">
-                    <div class="indicator-fill" style="width:0%"></div>
-                </div>
+                <div class="indicator-name">Enerji Verimliliği</div>
+                <div class="indicator-track"><div class="indicator-fill" style="width:0%"></div></div>
             </div>
             <div class="indicator-value">0%</div>
         </div>
+        <div class="indicator" id="bar-animals">
+            <div class="indicator-icon">😊</div>
+            <div class="indicator-body">
+                <div class="indicator-name">Hayvan Mutluluğu</div>
+                <div class="indicator-track"><div class="indicator-fill" style="width:80%"></div></div>
+            </div>
+            <div class="indicator-value">80%</div>
+        </div>
 
+        <div id="active-event-indicator" class="active-event" style="display:none"></div>
         <div id="score-warnings"></div>
         <div id="score-bonuses"></div>
     </section>
 
-    <!-- EĞİTSEL İPUCU BANDI (alt) -->
+    <!-- GÖREV PANELİ (sağ orta) -->
+    <section id="mission-panel">
+        <div class="mission-header" id="mission-toggle">
+            <span>🎯 Görevler</span>
+            <span id="mission-xp" class="mission-xp-badge">0 XP</span>
+        </div>
+        <div id="mission-list"></div>
+    </section>
+
+    <!-- EĞİTSEL İPUCU BANDI -->
     <div id="edu-tip-bar">
         <span class="tip-icon">💡</span>
         <span id="edu-tip-text">Hayvanlarını yerleştir, kompost kur ve döngüyü tamamla!</span>
     </div>
 
-    <!-- HUD SAĞ ALT (grid/gölge toggleları) -->
+    <!-- HUD (sağ alt) -->
     <section id="hud">
         <div class="hud-row">
             <div class="hud-clock">
                 <span class="sun-icon">🌞</span>
-                <span id="hud-time">--:--</span>
+                <span id="hud-time">06:00</span>
+                <span id="day-period" class="day-period">🌅 Sabah</span>
             </div>
         </div>
+        <div id="day-count" class="day-count">Gün 1</div>
         <div class="hud-toggles">
             <label class="toggle"><span>Gölgeler</span><input type="checkbox" id="toggle-ao" checked /><span class="switch"></span></label>
             <label class="toggle"><span>Izgara</span><input type="checkbox" id="toggle-grid" /><span class="switch"></span></label>
             <label class="toggle"><span>Kenarlar</span><input type="checkbox" id="toggle-borders" checked /><span class="switch"></span></label>
         </div>
+        <button id="btn-screenshot" class="screenshot-btn">📸 Ekran Görüntüsü</button>
     </section>
 
     <!-- KONTROL YARDIMI -->
-    <details id="instructions" aria-label="Kontroller">
+    <details id="instructions">
         <summary class="ins-summary">
-            <span class="ins-badge" aria-hidden="true">?</span>
+            <span class="ins-badge">?</span>
             <span class="ins-summary-label">Kontroller</span>
-            <span class="ins-summary-hint" aria-hidden="true">tıkla</span>
+            <span class="ins-summary-hint">tıkla</span>
         </summary>
         <div class="ins-grid ins-grid--mouse">
-            <span class="key">Tıkla</span><span>Seçili nesneyi yerleştir</span>
-            <span class="key">Sürükle</span><span>Birden fazla hücreye yerleştir</span>
-            <span class="key">Sağ tıkla</span><span>Sil</span>
+            <span class="key">Tıkla</span><span>Yerleştir</span>
+            <span class="key">Sağ tıkla</span><span>Sil / Bilgi kartı</span>
             <span class="key">Shift+sürükle</span><span>Kamerayı kaydır</span>
             <span class="key">Tekerlek</span><span>Yaklaştır / uzaklaştır</span>
             <span class="key">G</span><span>Izgarayı aç/kapa</span>
-            <span class="key">S / R</span><span>Kaydet / Sıfırla</span>
-        </div>
-        <div class="ins-grid ins-grid--touch">
-            <span class="key">Dokun</span><span>Seçili nesneyi yerleştir</span>
-            <span class="key">Sürükle</span><span>Birden fazla hücreye yerleştir</span>
-            <span class="key">Uzun bas</span><span>Nesneyi sil</span>
-            <span class="key">İki parmak</span><span>Yaklaştır / pan</span>
+            <span class="key">S</span><span>Kaydet</span>
+            <span class="key">R</span><span>Sıfırla</span>
         </div>
     </details>
 

@@ -93,6 +93,7 @@ export class Renderer {
         this.previewAssetId = null;  // null when not in place mode
         this.previewValid = true;
         this.eraseMode = false;
+        this.nightAlpha = 0; // 0=gündüz, 0.45=gece
         // Flip flags applied to the ghost preview (set by Game).
         this.previewFlipH = false;
         this.previewFlipV = false;

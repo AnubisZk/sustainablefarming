@@ -504,3 +504,199 @@ button.swatch .name    {
     #title-card  { padding: 8px 10px; }
     .title-text h1 { font-size: 12px; }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   YENİ SİSTEMLER — Görev, Olay, Bilgi kartı, HUD genişleme
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Hayvan mutluluğu göstergesi (5. bar) ─────────────────────── */
+#bar-animals .indicator-fill {
+    background: linear-gradient(90deg, #e8b840, #f4d860) !important;
+}
+
+/* ── Aktif olay göstergesi ────────────────────────────────────── */
+.active-event {
+    font-size: 10px; font-weight: 700;
+    padding: 4px 8px; border-radius: 6px;
+    background: rgba(200,120,30,.12);
+    color: #b87020;
+    border-left: 3px solid #e09030;
+    margin-top: 2px;
+}
+
+/* ── GÖREV PANELİ ─────────────────────────────────────────────── */
+#mission-panel {
+    position: fixed;
+    top: 50%;
+    right: var(--edge);
+    transform: translateY(-50%);
+    width: var(--score-w);
+    background: var(--paper);
+    border-radius: var(--r);
+    box-shadow: var(--shadow);
+    z-index: 10;
+    overflow: hidden;
+    max-height: 280px;
+}
+
+.mission-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 12px;
+    background: var(--grass);
+    color: #fff;
+    font-size: 11px; font-weight: 800;
+    cursor: pointer;
+    user-select: none;
+}
+.mission-header:hover { background: var(--grass-dark); }
+
+.mission-xp-badge {
+    background: rgba(255,255,255,.25);
+    border-radius: 99px;
+    padding: 2px 8px;
+    font-size: 10px; font-weight: 800;
+}
+
+#mission-list {
+    overflow-y: auto;
+    max-height: 220px;
+    padding: 6px;
+    display: flex; flex-direction: column; gap: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+}
+
+.mission-item {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 8px;
+    border-radius: var(--r-sm);
+    background: rgba(90,140,60,.06);
+    border: 1px solid var(--line);
+}
+.mission-item.mission-done {
+    opacity: .6;
+    background: rgba(90,140,60,.12);
+}
+.mission-icon { font-size: 16px; flex-shrink: 0; }
+.mission-body { flex: 1; min-width: 0; }
+.mission-title { font-size: 10px; font-weight: 800; color: var(--ink); }
+.mission-desc  { font-size: 9px; color: var(--muted); line-height: 1.3; }
+.mission-xp    { font-size: 9px; font-weight: 800; color: var(--grass-dark); flex-shrink: 0; }
+.mission-xp.done { color: var(--muted); }
+
+.mission-complete-all {
+    text-align: center; padding: 12px;
+    font-size: 11px; font-weight: 700; color: var(--grass-dark);
+}
+
+/* ── GÖREV TOAST ──────────────────────────────────────────────── */
+.mission-toast {
+    position: fixed;
+    bottom: calc(var(--tip-h) + 60px);
+    left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--grass-dark); color: #fff;
+    padding: 10px 18px;
+    border-radius: var(--r);
+    font-size: 12px; font-weight: 700;
+    box-shadow: var(--shadow-lg);
+    display: flex; align-items: center; gap: 10px;
+    opacity: 0; pointer-events: none;
+    transition: opacity .3s, transform .3s;
+    z-index: 60;
+}
+.mission-toast.show {
+    opacity: 1; transform: translateX(-50%) translateY(0);
+}
+
+/* ── ÇEVRESEL OLAY KARTI ──────────────────────────────────────── */
+.event-card {
+    position: fixed;
+    top: calc(var(--edge) + var(--title-h) + 8px);
+    left: 50%; transform: translateX(-50%) translateY(-20px);
+    background: var(--paper);
+    border: 2px solid #888;
+    border-radius: var(--r);
+    padding: 12px 16px;
+    max-width: 320px; width: 90%;
+    box-shadow: var(--shadow-lg);
+    display: flex; align-items: flex-start; gap: 10px;
+    opacity: 0;
+    transition: opacity .4s, transform .4s;
+    z-index: 40;
+}
+.event-card.show {
+    opacity: 1; transform: translateX(-50%) translateY(0);
+}
+.event-icon { font-size: 28px; flex-shrink: 0; }
+.event-body  { flex: 1; }
+.event-title { font-size: 13px; font-weight: 800; color: var(--ink); margin-bottom: 4px; }
+.event-desc  { font-size: 11px; color: var(--muted); line-height: 1.5; }
+.event-close {
+    background: none; border: none; cursor: pointer;
+    font-size: 14px; color: var(--muted); flex-shrink: 0;
+    padding: 0 2px;
+}
+.event-close:hover { color: var(--ink); }
+
+/* ── BİLGİ KARTI ──────────────────────────────────────────────── */
+.info-card {
+    position: fixed;
+    bottom: calc(var(--tip-h) + 8px);
+    left: 50%; transform: translateX(-50%);
+    width: min(420px, 92vw);
+    background: var(--paper);
+    border-radius: var(--r-lg);
+    padding: 16px 18px;
+    box-shadow: var(--shadow-lg);
+    z-index: 50;
+    border: 2px solid var(--grass);
+    transition: opacity .25s, transform .25s;
+}
+.info-card.hidden  { opacity: 0; pointer-events: none; transform: translateX(-50%) translateY(12px); }
+.info-card.visible { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+
+.info-card-close {
+    position: absolute; top: 10px; right: 12px;
+    background: none; border: none; cursor: pointer;
+    font-size: 14px; color: var(--muted);
+}
+.info-card-close:hover { color: var(--ink); }
+.info-card-icon { font-size: 32px; margin-bottom: 4px; }
+.info-card-name { font-size: 15px; font-weight: 800; color: var(--grass-dark); margin-bottom: 10px; }
+.info-card-sections { display: flex; flex-direction: column; gap: 8px; }
+.info-section {}
+.info-section-label { font-size: 9px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 2px; }
+.info-section-text  { font-size: 11px; color: var(--ink-soft); line-height: 1.6; }
+
+/* ── GÜN SAYACI / SAAT ────────────────────────────────────────── */
+.day-period {
+    font-size: 10px; font-weight: 700;
+    color: var(--straw-dark); margin-left: 4px;
+}
+.day-count {
+    font-size: 11px; font-weight: 800;
+    color: var(--grass-dark);
+    text-align: center;
+    padding: 2px 0 4px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 4px;
+}
+
+/* ── SCREENSHOT BUTONU ────────────────────────────────────────── */
+.screenshot-btn {
+    width: 100%; margin-top: 6px;
+    padding: 6px 8px;
+    background: var(--grass); color: #fff;
+    border: none; border-radius: var(--r-sm);
+    font-size: 10px; font-weight: 800;
+    cursor: pointer;
+    transition: background .15s, transform .1s;
+}
+.screenshot-btn:hover  { background: var(--grass-dark); }
+.screenshot-btn:active { transform: scale(.97); }
+
+/* ── KÜÇÜK EKRAN DÜZELTMELERİ ────────────────────────────────── */
+@media (max-width: 768px) {
+    #mission-panel { display: none; }
+    .info-card { bottom: calc(var(--tip-h) + 4px); }
+}
